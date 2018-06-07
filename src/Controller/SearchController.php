@@ -18,7 +18,7 @@ class SearchController extends Controller
     {
         $countryRepo = $this->getDoctrine()->getRepository(Country::class);
 
-        $dist=null; $lat=null; $long=null; $dens=null; $tempAvg=0; $lang1=null; $lang2=null; $lang3=null ; $cont=null; $devise=null;
+        $dist=null; $lat=null; $long=null; $dens=null; $tempAvg=null; $lang1=null; $lang2=null; $lang3=null ; $cont=null; $devise=null;
 /*
         $dist=$request->get('dist');
         $lat=$request->get('lat');
