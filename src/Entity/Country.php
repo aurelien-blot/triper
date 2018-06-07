@@ -202,7 +202,8 @@ class Country implements \JsonSerializable
             "continent"=>$this->getContinent()->getName(),
             "devise"=>$this->getMoneyId()->getName(),
             "iso2"=>$this->getIso2(),
-            "iso3"=>$this->getIso3()
+            "iso3"=>$this->getIso3(),
+            "code"=>$this->getCode()
         ];
     }
 

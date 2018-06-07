@@ -10,12 +10,13 @@
       "texte": "Distance maximale",
       "id": "densForm",
       "option":[
+        {"value":30000, "id":"distAll","texte":"Partout sur terre" },
         {"value":1000, "id":"dist10","texte":"- de 1000km"},
         {"value":2500, "id":"dist25","texte":"- de 2500km" },
         {"value":5000, "id":"dist50","texte":"- de 5000km" },
         {"value":10000, "id":"dist100","texte":"- de 10 000km" },
-        {"value":15000, "id":"dist150","texte":"- de 15 000km" },
-        {"value":40000, "id":"distAll","texte":"Partout sur terre" }
+        {"value":15000, "id":"dist150","texte":"- de 15 000km" }
+
       ]
     },
     {

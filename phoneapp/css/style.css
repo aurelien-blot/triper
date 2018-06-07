@@ -1,0 +1,91 @@
+body{
+    margin: auto;
+    background-image: linear-gradient(#dd6666, #dadada);
+    min-height: 100vh;
+}
+main {
+
+    padding-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+
+}
+
+
+
+.choice{
+    margin: auto;
+    margin-top: 30px;
+    width: 90%;
+    background: #f6f6f6;
+    border-radius: 10px ;
+    min-height: 60vh;
+
+    border: 2px black solid;
+
+}
+
+.choice h2{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 20px;
+    text-align: center;
+}
+header{
+    background: #9fcdff;
+    margin: 0;
+    height: 60px;
+    padding: 5px;
+}
+h1{
+
+    text-align: center;
+}
+#logoUser{
+
+    height: 50px;
+    float: right;
+}
+#collapseExample{
+    width: 100%;
+    height: 30px;
+    background: red;
+}
+#plusVert{
+    width: 30px;
+}
+form{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+#valider{
+    width: 100px;
+}
+#listeCrit{
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+}
+#listeCrit div{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+
+}
+#listeCrit div button {
+width: 80%;
+}
+#listeCrit div p {
+
+    width: 80%;
+    background: #dadada;
+}
+
+.result{
+    margin: 3px;
+    height: 30px;
+    border:gray 1px solid;
+    border-radius: 10px ;
+    background: #f6f6f6;
+}
