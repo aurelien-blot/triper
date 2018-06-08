@@ -212,7 +212,6 @@ function addCritere(critere){
             parametersJson[critere].texte = findLabel(data);
         }
         else{
-            var concatLabel='';
             parametersJson[critere].value=[];
             for(var i = 0; i <3;i++){
                 if(data[i] !=null){
@@ -248,9 +247,10 @@ function createGetRequestData(){
         var parameter = parametersJson[this.name];
 
         if (this.name == 'lang') {
-            for (var i = 0; i < parameter.length; i++) {
-                if (parameter[i].value != null) {
-                    getData[this.name+i] = (parameter.value);
+
+            for (var i = 0; i < parameter.value.length; i++) {
+                if (parameter.value[i] != null) {
+                    getData[this.name+(i+1)] = (parameter.value[i].value);
                 }
             }
         }
