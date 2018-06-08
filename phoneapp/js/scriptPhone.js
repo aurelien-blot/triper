@@ -10,7 +10,8 @@ $.getJSON('criteres.json',
 });
 
 var parametersJson= {};
-
+$('#windowNewCrit').hide();
+$('#resultList').hide();
 
 
 
@@ -25,9 +26,6 @@ function createResultparametersJson(){
             }
             else if(this.name=='lang'){
                 parametersJson[this.name]={value:null, texte:null };
-                /*parametersJson.lang1={value:null, texte:null };
-                parametersJson.lang2={value:null, texte:null };
-                parametersJson.lang3={value:null, texte:null };*/
             }
             else{
                 parametersJson[this.name]={value:null, texte:null };
@@ -57,16 +55,24 @@ function afficherChoixNouveauCritere(){
 // J AFFICHE TOUS LES CRITERES QUI ONT DEJA UNE VALEUR REMPLIE
 function afficherCrit() {
     $(criteresJson).each(
-        function (e) {
+        function () {
 
             var name = this.name;
             if(parametersJson[name].value != null) {
                 $('#listeCrit').append('<div id="' + name + '" class="buttonCrit">');
-                $('#' + name).append('<button type="button" class="btn btn-primary">' + this.texte + ' :</button>');
+                $('#' + name).append('<button type="button" class="btn btn-primary critButton" id="'+name+'">' + this.texte + ' :</button>');
                 $('#' + name).append('<p class="recordCrit">' + parametersJson[this.name].texte + '</p>');
                 $('#' + name).append('</div>');
+
+                $('#'+name).on('click', function () {
+                    addCritere(name);
+                    $('#search').hide();
+                    $('#windowNewCrit').show();
+                });
             }
-        });
+
+
+            });
     //$('.buttonCrit').hide();
     //$('#dist').show();
     afficherChoixNouveauCritere();
@@ -101,8 +107,8 @@ function selectNewCrit(){
         $('#windowNewCrit').html('');
         if(crit()!=null){
             addCritere(crit());
-            //$('#search').toggle();
-            //$('#windowNewCrit').toggle();
+            $('#search').hide();
+            $('#windowNewCrit').show();
         }
 
         //$('#newcritere').hide();
@@ -115,7 +121,7 @@ function addCritere(critere){
     var eType;
     var eName;
     $(criteresJson).each(
-        function (e) {
+        function () {
             if (this.name == critere) {
 
                 var typeInput = this.type;
@@ -146,7 +152,6 @@ function addCritere(critere){
     $('#form').append('<button type="button" class="btn btn-success" ' +'id="valider">OK</button>');
     $('#valider').on("click", function(){
         var value;
-        var label;
 
         if(eType == 'text'){
             data=$('#form input');
@@ -223,8 +228,9 @@ function addCritere(critere){
 
         }
 
-        //$('#search').toggle();
-        //$('#windowNewCrit').toggle();
+        $('#search').show();
+        $('#windowNewCrit').hide();
+
         $('#windowNewCrit').html('');
         $('#listeCrit').html('');
         afficherCrit();
@@ -247,12 +253,14 @@ function createGetRequestData(){
         var parameter = parametersJson[this.name];
 
         if (this.name == 'lang') {
-
-            for (var i = 0; i < parameter.value.length; i++) {
-                if (parameter.value[i] != null) {
-                    getData[this.name+(i+1)] = (parameter.value[i].value);
+            if(parameter.value ==[]){
+                for (var i = 0; i < parameter.value.length; i++) {
+                    if (parameter.value[i] != null) {
+                        getData[this.name+(i+1)] = (parameter.value[i].value);
+                    }
                 }
             }
+
         }
 
         else if (parameter.value != null) {
@@ -260,9 +268,6 @@ function createGetRequestData(){
         }
 
     });
-
-    console.log(parametersJson);
-    console.log(getData);
 
     return getData;
 }
@@ -280,7 +285,7 @@ function getResults(){
 
 // RECEPTION ET AFFICHAGE DES RESULTATS
 function showResults(content){
-
+    $('#resultList').show();
     $('#resultList').html('');
     content.data.forEach(function(d){
         var divId = d.code+'Div';
