@@ -191,6 +191,7 @@ class Country implements \JsonSerializable
 
 
         return[
+            "id"=>$this->getId(),
             "name"=> $this->getName(),
             "capitale"=>$this->getCapital()->getName(),
             "area"=>$this->getArea(),

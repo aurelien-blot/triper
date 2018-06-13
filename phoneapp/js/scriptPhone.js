@@ -12,6 +12,7 @@ $.getJSON('criteres.json',
 var parametersJson= {};
 $('#windowNewCrit').hide();
 $('#resultList').hide();
+$('#oneResult').hide();
 
 
 
@@ -253,10 +254,13 @@ function createGetRequestData(){
         var parameter = parametersJson[this.name];
 
         if (this.name == 'lang') {
-            if(parameter.value ==[]){
+
+            if(parameter.value !=null){
+
                 for (var i = 0; i < parameter.value.length; i++) {
-                    if (parameter.value[i] != null) {
-                        getData[this.name+(i+1)] = (parameter.value[i].value);
+                    if (parameter.value[i].value != null) {
+                        getData['lang'+(i+1)] = (parameter.value[i].value);
+
                     }
                 }
             }
@@ -291,22 +295,118 @@ function showResults(content){
         var divId = d.code+'Div';
         var linkId = d.code+'Link';
 
-        $('#resultList').append('<a class="resultLink" id="'+linkId +'" href=""></a>');
-        $('#'+linkId).append('<div class="result" id="'+ divId +'"></div>');
+        //$('#resultList').append('<a class="resultLink" id="'+linkId +'" href="#'+d.code +'"></a>');
+        //$('#'+linkId).append('<div class="result" id="'+ divId +'"></div>');
+        $('#resultList').append('<div class="result" id="'+ divId +'"></div>');
         $('#'+divId).append('<strong>'+d.name+'</strong>');
+        $('#'+divId).on("click", function(){
+            showOneResult(d.id)
+        });
 
     })
-    //$('#resultList').show();
+
 }
 
+function showOneResult(dest){
+
+    /* IMPORTATION DE LA PHOTO GOOGLE
+        var placeCode;
+        $.get(
+                "https://maps.googleapis.com/maps/api/place/textsearch/json?query="+dest.capitale+"&key=AIzaSyB-gTaZboIBJXboJdE79_-tPHVXMz74RM8",
+                function(data){
+                   placeCode = data.results[0].photos[0].photo_reference;
+                   console.log(data.results[0].formatted_address);
+                },
+                'json'
+        );
+        */
+    $('#resultList').hide();
+    $('#search').hide();
+    $.get(
+        'http://localhost/triper/triper/public/findOne/api/v1',
+        {'dest' : dest},
+        function(data){
+            var result = data.data;
+
+            $('#oneResult').append('<h2>'+result.name+'</h2>');
+            $('#oneResult').append('<img id="pictureCapital" src="http://www.countryflags.io/'+result.iso2+'/flat/64.png" </img>');
+
+            $('#oneResult').append('<button id="backToSearch" type="button" class="btn btn-success">Retour aux résultats</button>');
+            $('#backToSearch').on("click", function(){
+                $('#oneResult').html('');
+                $('#oneResult').hide();
+                $('#resultList').show();
+                $('#search').show();
+            })
+            $('#oneResult').show();
+        },
+        'json'
+    );
+
+
+
+
+}
 //endregion
 
 
 //region EVENT LISTENERS
 
+var connected = false;
 
+function initLoginDiv(){
+    $('#loginDiv').html('');
+    $('#loginDiv').append('<button class="btn btn-secondary" type="button" id="loginBtn">Se connecter</button>');
+    $('#loginDiv').append('<button class="btn btn-secondary" type="button" id="subscribeBtn">Créer un compte</button>');
+    $('#loginDiv').toggle();
+}
+
+function loginAPIget(log, pwd){
+    console.log(log);
+    console.log(pwd);
+    $.getJSON('criteres.json',
+        function(file){
+            criteresJson= file.data;
+            createResultparametersJson();
+
+        });
+
+};
 
 $('#chercher').on("click", function(){getResults()});
+
+
+
+$('#logoUser').on("click", function () {
+    $('#userDiv').toggle();
+
+    if(connected){
+
+        $('#loggedDiv').toggle();
+
+    }
+    else{
+
+        initLoginDiv();
+        $('#loginBtn').on("click", function () {
+            $('#loginDiv').html('');
+            $('#loginDiv').append('<input id="nameLoginForm" type="text" class="loginForm" placeholder="Votre nom"/>');
+            $('#loginDiv').append('<input id="pwdLoginForm" type="password" class="loginForm" placeholder="Votre mot de passe"/>');
+            $('#loginDiv').append('<button class="btn btn-secondary loginForm" type="button" id="validLogin">Se connecter</button>');
+            $('#validLogin').on("click", function () {
+                loginAPIget($('#nameLoginForm').val(), $('#pwdLoginForm').val());
+            })
+        })
+        $('#subscribeBtn').on("click", function () {
+            $('#loginDiv').html('');
+            $('#loginDiv').append('<input id="nameSubscribeForm" type="text" class="loginForm" placeholder="Votre nom"/>');
+            $('#loginDiv').append('<input id="pwdSubscribeForm" type="password" class="loginForm" placeholder="Votre mot de passe"/>');
+            $('#loginDiv').append('<button class="btn btn-secondary loginForm" type="button" id="validSubscribe">Se connecter</button>');
+        })
+    }
+});
+
+
 
 //endregion
 

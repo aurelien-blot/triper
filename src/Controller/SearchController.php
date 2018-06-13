@@ -11,7 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class SearchController extends Controller
 {
     /**
-     * @Route("/search/api/v1", name="search")
+     * @Route("/search/api/v1", name="search", methods={"GET"})
      */
     // RAJOUTER methods={"GET"}
     public function index(Request $request)
@@ -35,6 +35,23 @@ class SearchController extends Controller
         $devise=$request->get('devise');
 
         $countries = $countryRepo->search($dist,$lat,$long, $dens, $tempAvg, $lang1,$lang2, $lang3, $cont, $devise );
+        //$countries = $countryRepo->search();
+
+        return $this->json([
+            "status"=>"ok",
+            "message"=>"envoi reussi",
+            "data" => $countries
+        ]);
+    }
+    /**
+     * @Route("/findOne/api/v1", name="findOne")
+     */
+    // RAJOUTER methods={"GET"}
+    public function findOne(Request $request)
+    {
+        $countryRepo = $this->getDoctrine()->getRepository(Country::class);
+
+        $countries = $countryRepo->find($request->get('dest'));
         //$countries = $countryRepo->search();
 
         return $this->json([

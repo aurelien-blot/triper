@@ -16,10 +16,10 @@ class LoginController extends Controller
     public function index(Request $request)
     {
 
-        //$login = $request->get('login');
-        $pwd = sha1($request->get('pwd'));
-        $login = "Monnerie";
-        $pwd = sha1("test");
+        $login = $request->get('login');
+        $pwd = sha1($request->get('pwd').'00x!');
+       //$login = "rene";
+        //$pwd = sha1("rene".'00x!');
 
         $usersRepo = $this->getDoctrine()->getRepository(Users::class);
         $users = $usersRepo->findOneByPseudo($login);
@@ -33,7 +33,7 @@ class LoginController extends Controller
             ]);
 
 
-        }elseif ( $pwd != $users->getPassword() ){
+        }elseif ($pwd != $users->getPassword() ){
             return $this->json([
                 "status"=>"KO",
                 "message"=>"mot de passe incorrect",

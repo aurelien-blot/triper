@@ -89,3 +89,15 @@ width: 80%;
     border-radius: 10px ;
     background: #f6f6f6;
 }
+
+#userDiv{
+    background: #005cbf;
+    height: 60px;
+    border-radius: 0 0 10px 10px;
+}
+
+#loginDiv{
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+}

@@ -22,11 +22,11 @@ class CreateUserController extends Controller
         $mail = $request->get("mail");
         $pwd = sha1($request->get("pwd").'00x!');
 */
-        $nom = 'Eglesias';
-        $prenom = 'Julio';
-        $pseudo = 'Lover';
+        $nom = 'api';
+        $prenom = 'rene';
+        $pseudo = 'api';
         $mail = 'eijfzojsf';
-        $pwd = 'test';
+        $pwd = 'api';
 
         $users->setNom($nom);
         $users->setPrenom($prenom);
