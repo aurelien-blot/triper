@@ -16,10 +16,10 @@ class LoginController extends Controller
     public function index(Request $request)
     {
 
-        //$login = $request->get('login');
-        $pwd = sha1($request->get('pwd'));
-        $login = "Monnerie";
-        $pwd = sha1("test");
+        $login = $request->get('login');
+        $pwd = sha1($request->get('pwd').'00x!');
+        //$login = "Monnerie";
+        //$pwd = sha1("test".'00x!');
 
         $usersRepo = $this->getDoctrine()->getRepository(Users::class);
         $users = $usersRepo->findOneByPseudo($login);
