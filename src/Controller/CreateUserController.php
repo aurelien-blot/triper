@@ -20,7 +20,7 @@ class CreateUserController extends Controller
         $prenom = $request->get("prenom");
         $pseudo = $request->get("pseudo");
         $mail = $request->get("mail");
-        $pwd = sha1($request->get("pwd").'00x!');
+        $pwd = sha1(($request->get("pwd")).'00x!');
 /*
         $nom = 'api';
         $prenom = 'rene';
@@ -32,7 +32,7 @@ class CreateUserController extends Controller
         $users->setPrenom($prenom);
         $users->setPseudo($pseudo);
         $users->setMail($mail);
-        $users->setPassword(sha1($pwd.'00x!'));
+        $users->setPassword($pwd);
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($users);
