@@ -54,4 +54,5 @@ class URL
 
         return $this;
     }
+
 }

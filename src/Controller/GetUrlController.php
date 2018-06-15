@@ -16,15 +16,16 @@ class GetUrlController extends Controller
      */
         public function index(Request $request)
     {
-        $url = new URL();
-        $userId= 1;
-        $exemple ="HFHYGIHVXFHH";
+        $url= new URL();
+        $getUrl =$request->get('destId');
+        $userId =$request->get('userId');
+
         $UsersRepo = $this->getDoctrine()->getRepository(Users::class);
         $users = $UsersRepo->findOneById($userId);
 
 
         $url->setUser($users);
-        $url->setUrl($exemple);
+        $url->setUrl($getUrl);
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($url);

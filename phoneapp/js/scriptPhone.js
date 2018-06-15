@@ -4,7 +4,8 @@ var criteresJson;
 
 $.getJSON('criteres.json',
     function(file){
-        criteresJson= file.data;
+        criteresJson
+            = file.data;
         createResultparametersJson();
 
 });
@@ -13,6 +14,7 @@ var parametersJson= {};
 $('#windowNewCrit').hide();
 $('#resultList').hide();
 $('#oneResult').hide();
+$('#subscribeDiv').hide();
 
 
 
@@ -40,7 +42,7 @@ function createResultparametersJson(){
 
 // FUNCTION QUI PERMET DE SELECT LE CRITERE A AJOUTER :
 function afficherChoixNouveauCritere(){
-
+    $('#greenLink').show();
     $('#criteres').html('');
     $('#criteres').append('<select name="critere" id="newcritere" /></select>');
     $('#newcritere').append('<option value="">Ajouter un critère :</option>');
@@ -55,17 +57,34 @@ function afficherChoixNouveauCritere(){
 
 // J AFFICHE TOUS LES CRITERES QUI ONT DEJA UNE VALEUR REMPLIE
 function afficherCrit() {
+
+
+    $('#listeCrit').html('');
     $(criteresJson).each(
         function () {
 
             var name = this.name;
+            var texte = this.texte;
             if(parametersJson[name].value != null) {
-                $('#listeCrit').append('<div id="' + name + '" class="buttonCrit">');
-                $('#' + name).append('<button type="button" class="btn btn-primary critButton" id="'+name+'">' + this.texte + ' :</button>');
-                $('#' + name).append('<p class="recordCrit">' + parametersJson[this.name].texte + '</p>');
-                $('#' + name).append('</div>');
+                $('#listeCrit').append('<div id="' + name + '" ></div>');
+                $('#' +  name).append('<div id="' + name + 'Crit" class="buttonCrit"></div>');
+                $('#' + name+ 'Crit').append('<button type="button" class="btn btn-primary critButton" id="'+name+'">' + this.texte + ' :</button>');
+                $('#' + name+ 'Crit').append('<p class="recordCrit">' + parametersJson[this.name].texte + '</p>');
+                if(name!='dist'){
+                    $('#' +  name).append('<div id="' + name + 'Moins" class="delCrit">');
+                    $('#' + name + 'Moins').append('<img id="'+name+'RedMoins" class="redMoins" src="img/redMoins.png"/>');
+                    $('#' + name+'RedMoins').on("click", function(){
+                        parametersJson[name].value=null;
+                        $('#' +  name).html('');
+                        $('select').append('<option  value="' + name + '">' + texte + '</option>');
 
-                $('#'+name).on('click', function () {
+
+                    });
+                }
+
+
+
+                $('#'+name+ 'Crit').on('click', function () {
                     addCritere(name);
                     $('#search').hide();
                     $('#windowNewCrit').show();
@@ -74,8 +93,10 @@ function afficherCrit() {
 
 
             });
+
     //$('.buttonCrit').hide();
     //$('#dist').show();
+
     afficherChoixNouveauCritere();
 }
 
@@ -90,12 +111,20 @@ function afficherCrit() {
 //region GESTION DES CRITERES
 
 // FONCTION POUR AJOUTER UN  NOUVEAU CRITERE EN CLIQUANT SUR PLUS VERT PUIS SELECT
+
+
 function selectNewCrit(){
 
+
+    $('#newcritere').hide();
+
     $('#greenLink').on("click", function(){
-        //$('#newcritere').show();
+        $('#greenLink').hide();
+        $('#newcritere').show();
+
     });
     $('#newcritere').change(function(e){
+        $('#greenLink').show();
         function crit(){
             if($('#newcritere option:selected').val() != ''){
                 return $('#newcritere option:selected').val();
@@ -287,23 +316,32 @@ function getResults(){
 
 }
 
+
+
 // RECEPTION ET AFFICHAGE DES RESULTATS
 function showResults(content){
     $('#resultList').show();
     $('#resultList').html('');
-    content.data.forEach(function(d){
-        var divId = d.code+'Div';
-        var linkId = d.code+'Link';
+    if(content.data.length !=0){
+        content.data.forEach(function(d){
+            var divId = d.code+'Div';
+            var linkId = d.code+'Link';
 
-        //$('#resultList').append('<a class="resultLink" id="'+linkId +'" href="#'+d.code +'"></a>');
-        //$('#'+linkId).append('<div class="result" id="'+ divId +'"></div>');
-        $('#resultList').append('<div class="result" id="'+ divId +'"></div>');
-        $('#'+divId).append('<strong>'+d.name+'</strong>');
-        $('#'+divId).on("click", function(){
-            showOneResult(d.id)
-        });
+            //$('#resultList').append('<a class="resultLink" id="'+linkId +'" href="#'+d.code +'"></a>');
+            //$('#'+linkId).append('<div class="result" id="'+ divId +'"></div>');
+            $('#resultList').append('<div class="result" id="'+ divId +'"></div>');
+            $('#'+divId).append('<strong>'+d.name+'</strong>');
+            $('#'+divId).on("click", function(){
+                showOneResult(d.id)
+            });
 
-    })
+        })
+    }
+    else{
+        $('#resultList').append('<div class="result" id="noResult"></div>');
+        $('#noResult').append('<strong>Aucun résultat trouvé</strong>');
+    }
+
 
 }
 
@@ -343,16 +381,26 @@ function showOneResult(dest){
         'json'
     );
 
+    sendURL(dest, 1);
+
+}
 
 
-
+function sendURL(dest, userId){
+    $.get(
+        'http://localhost/triper/triper/public/url/api/v1',
+        {
+            'destId' : dest,
+            'userId':userId
+        },
+        'json'
+    );
 }
 //endregion
 
-
-//region EVENT LISTENERS
-
+//region USER
 var connected = false;
+var userJson;
 
 function initLoginDiv(){
     $('#loginDiv').html('');
@@ -361,29 +409,89 @@ function initLoginDiv(){
     $('#loginDiv').toggle();
 }
 
-function loginAPIget(log, pwd){
-    console.log(log);
-    console.log(pwd);
-    $.getJSON('criteres.json',
-        function(file){
-            criteresJson= file.data;
-            createResultparametersJson();
+function showFavorites(){
 
-        });
+}
+
+function showHisto(){
+    $.get(
+        'http://localhost/triper/triper/public/histo/api/v1',
+        {'userId': 1},
+        function(data){
+
+            $(data.data).each(function () {
+                console.log(this);
+            })
+        },
+        'json'
+    );
+}
+function initConnected(){
+    $('#loginDiv').html('');
+    $('#loginDiv').append('<img id="starNavIcon" class="navIcon" src="img/star.png"/>');
+    $('#loginDiv').append('<img id="histoNavIcon" class="navIcon" src="img/histo1.png"/>');
+    $('#loginDiv').append('<img id="logoutNavIcon" class="navIcon" src="img/logout2.png"/>');
+
+    $('#logoutNavIcon').on("click", function () {
+
+        connected = false;
+        userJson=null;
+        showUserNav();
+        $('#userDiv').toggle();
+
+    });
+    $('#starNavIcon').on("click", function () {
+        showFavorites();
+
+    });
+    $('#histoNavIcon').on("click", function () {
+        showHisto();
+
+    });
 
 };
 
-$('#chercher').on("click", function(){getResults()});
+function loginAPIget(log, pwd){
+
+    $.get('http://localhost/triper/triper/public/login/api/v1',
+        { login : log, pwd:pwd},
+        function (data) {
+            if(data.status != 'OK'){
+
+            }
+            else{
+                userJson =  data;
+                connected =true;
+                initConnected();
+            }
+
+        });
+};
+
+function createUserAPIget(pseudo,prenom, nom, mail,pwd){
+
+    $.get('http://localhost/triper/triper/public/create/api/v1',
+        {pseudo:pseudo,  prenom:prenom, nom : nom,mail:mail, pwd:pwd},
+        function (data) {
+            if(data.status != 'OK'){
 
 
+            }
+            else{
+                connected =true;
 
-$('#logoUser').on("click", function () {
-    $('#userDiv').toggle();
+                $('#subscribeDiv').hide();
+                initConnected();
+                $('#search').show();
+                //MESSAGE DE CONFIRMATION
+            }
 
+        });
+};
+
+function showUserNav(){
     if(connected){
-
         $('#loggedDiv').toggle();
-
     }
     else{
 
@@ -398,13 +506,42 @@ $('#logoUser').on("click", function () {
             })
         })
         $('#subscribeBtn').on("click", function () {
-            $('#loginDiv').html('');
-            $('#loginDiv').append('<input id="nameSubscribeForm" type="text" class="loginForm" placeholder="Votre nom"/>');
-            $('#loginDiv').append('<input id="pwdSubscribeForm" type="password" class="loginForm" placeholder="Votre mot de passe"/>');
-            $('#loginDiv').append('<button class="btn btn-secondary loginForm" type="button" id="validSubscribe">Se connecter</button>');
+            $('#userDiv').hide();
+            $('.choice').hide();
+            $('#subscribeDiv').show();
+            $('#subscribeDiv').append('<h2>Création du compte :</h2>');
+            $('#subscribeDiv').append('<input id="pseudoSubscribeForm" type="text" class="loginForm" placeholder="Votre pseudo"/>');
+            $('#subscribeDiv').append('<input id="fistnameSubscribeForm" type="text" class="loginForm" placeholder="Votre prénom"/>');
+            $('#subscribeDiv').append('<input id="nameSubscribeForm" type="text" class="loginForm" placeholder="Votre nom"/>');
+            $('#subscribeDiv').append('<input id="mailSubscribeForm" type="text" class="loginForm" placeholder="Votre mail"/>');
+            $('#subscribeDiv').append('<input id="pwdSubscribeForm" type="password" class="loginForm" placeholder="Votre mot de passe"/>');
+            $('#subscribeDiv').append('<input id="pwd2SubscribeForm" type="password" class="loginForm" placeholder="Confirmation du mot de passe"/>');
+
+
+            $('#subscribeDiv').append('<button class="btn btn-secondary loginForm" type="button" id="validSubscribe">Se connecter</button>');
+            $('#subscribeDiv').append('<img id="logoutSubscribeIcon" src="img/logout2.png"/>');
+
+            $('#validSubscribe').on("click", function () {
+                createUserAPIget($('#pseudoSubscribeForm').val(),$('#fistnameSubscribeForm').val(),$('#nameSubscribeForm').val(),$('#mailSubscribeForm').val(),$('#pwdSubscribeForm').val());
+            })
         })
     }
+}
+
+$('#logoUser').on("click", function () {
+    $('#userDiv').toggle();
+    showUserNav();
+
 });
+
+//endregion
+//region EVENT LISTENERS
+
+
+$('#chercher').on("click", function(){getResults()});
+
+
+
 
 
 

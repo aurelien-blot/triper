@@ -22,7 +22,7 @@ class CountryRepository extends ServiceEntityRepository
     public function search($dist=null, $lat=null, $long=null, $dens=null, $tempAvg=null, $lang1=null,$lang2=null,$lang3=null,$cont=null, $devise=null){
         //($dist=null, $lat=null, $long=null, $dens=null, $tempAvg=null $lang1=null,$lang2=null,$lang3=null, $cont=null, $devise=null)
         //DEMO
-        $pourcentageMinLang = 50; //50%
+        $pourcentageMinLang = 20; //50%
         $toleranceTemp =2;
         $toleranceDensite =20;
 /*

@@ -51,7 +51,7 @@ h1{
     height: 30px;
     background: red;
 }
-#plusVert{
+#greenLink{
     width: 30px;
 }
 form{
@@ -100,4 +100,21 @@ width: 80%;
     display: flex;
     justify-content: space-between;
     padding: 10px;
+}
+
+.redMoins{
+    width: 30px;
+
+}
+
+.jsonCrit{
+    display: flex;
+}
+
+.navIcon{
+    height: 40px;
+}
+
+#logoutSubscribeIcon{
+    height: 50px;
 }

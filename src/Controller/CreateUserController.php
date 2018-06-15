@@ -15,19 +15,19 @@ class CreateUserController extends Controller
     public function index(Request $request)
     {
         $users = new Users();
-        /*
+
         $nom = $request->get("nom");
         $prenom = $request->get("prenom");
         $pseudo = $request->get("pseudo");
         $mail = $request->get("mail");
         $pwd = sha1($request->get("pwd").'00x!');
-*/
+/*
         $nom = 'api';
         $prenom = 'rene';
         $pseudo = 'api';
         $mail = 'eijfzojsf';
         $pwd = 'api';
-
+*/
         $users->setNom($nom);
         $users->setPrenom($prenom);
         $users->setPseudo($pseudo);

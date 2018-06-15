@@ -19,6 +19,20 @@ class URLRepository extends ServiceEntityRepository
         parent::__construct($registry, URL::class);
     }
 
+
+    public function last($sizeTop, $userId){
+
+        $qb=$this->createQueryBuilder('u');
+        $qb->andWhere('u.user = :userId');
+        $qb->setParameter('userId', $userId);
+        $qb->orderBy('u.id', 'DESC');
+        $qb->setMaxResults($sizeTop);
+
+        $query = $qb->getQuery();
+        $results = $query->getResult();
+        return $results;
+    }
+
 //    /**
 //     * @return URL[] Returns an array of URL objects
 //     */

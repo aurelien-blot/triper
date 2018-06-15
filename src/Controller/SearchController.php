@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Country;
+use App\Entity\URL;
 use Symfony\Component\HttpFoundation\Request;
 
 use Symfony\Component\Routing\Annotation\Route;
@@ -52,6 +53,32 @@ class SearchController extends Controller
         $countryRepo = $this->getDoctrine()->getRepository(Country::class);
 
         $countries = $countryRepo->find($request->get('dest'));
+        //$countries = $countryRepo->search();
+
+        return $this->json([
+            "status"=>"ok",
+            "message"=>"envoi reussi",
+            "data" => $countries
+        ]);
+    }
+
+    /**
+     * @Route("/histo/api/v1", name="histo")
+     */
+    // RAJOUTER methods={"GET"}
+    public function histo(Request $request)
+    {
+
+        $userId=$request->get('userId');
+        $urlrepo = $this->getDoctrine()->getRepository(URL::class);
+        $urls= $urlrepo->last(5, $userId);
+        $countryRepo = $this->getDoctrine()->getRepository(Country::class);
+
+        foreach ($urls as $url){
+            $countries[] = $countryRepo->findOneById($url->getUrl());
+        }
+
+
         //$countries = $countryRepo->search();
 
         return $this->json([
