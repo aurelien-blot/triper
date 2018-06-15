@@ -23,6 +23,8 @@ class URLRepository extends ServiceEntityRepository
     public function last($sizeTop, $userId){
 
         $qb=$this->createQueryBuilder('u');
+        $qb->select('u.url');
+        $qb->distinct();
         $qb->andWhere('u.user = :userId');
         $qb->setParameter('userId', $userId);
         $qb->orderBy('u.id', 'DESC');

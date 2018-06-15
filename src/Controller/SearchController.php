@@ -75,7 +75,7 @@ class SearchController extends Controller
         $countryRepo = $this->getDoctrine()->getRepository(Country::class);
 
         foreach ($urls as $url){
-            $countries[] = $countryRepo->findOneById($url->getUrl());
+            $countries[] = $countryRepo->findOneById($url);
         }
 
 
