@@ -116,6 +116,7 @@ class Users implements \JsonSerializable
     public function jsonSerialize()
     {
         return [
+            "id"=>$this->getId(),
           "pseudo"=>$this->getPseudo(),
           "nom"=>$this->getNom(),
           "prenom"=>$this->getPrenom(),
